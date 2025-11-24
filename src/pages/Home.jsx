@@ -4,6 +4,12 @@ import TodoItem from '../components/TodoItem';
 import { supabase } from '../supabaseClient';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import ThemeToggle from '../components/ThemeToggle';
+import ParticleBackground from '../components/ParticleBackground';
+import { CalendarIcon } from '@heroicons/react/24/outline';
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
+import confetti from 'canvas-confetti';
 
 const QUOTES = [
     "Discipline is doing what needs to be done, even if you don't want to do it.",
@@ -17,10 +23,10 @@ const QUOTES = [
     "The body achieves what the mind believes.",
     "Motivation is what gets you started. Habit is what keeps you going.",
     "A one-hour workout is only 4% of your day. No excuses.",
-    "Fitness is not about being better than someone else. It’s about being better than you were yesterday.",
+    "Fitness is not about being better than someone else. It's about being better than you were yesterday.",
     "Discipline is the bridge between goals and accomplishment.",
-    "You don’t have to be extreme, just consistent.",
-    "Excuses don’t burn calories.",
+    "You don't have to be extreme, just consistent.",
+    "Excuses don't burn calories.",
     "Suffer the pain of discipline, or suffer the pain of regret.",
     "It never gets easier, you just get better.",
     "Action is the foundational key to all success.",
@@ -29,18 +35,18 @@ const QUOTES = [
     "Believe you can and you're halfway there.",
     "What hurts today makes you stronger tomorrow.",
     "Clear your mind of can't.",
-    "Your body can stand almost anything. It’s your mind that you have to convince.",
+    "Your body can stand almost anything. It's your mind that you have to convince.",
     "Make yourself proud.",
     "Run when you can, walk if you have to, crawl if you must; just never give up.",
-    "Go the extra mile. It’s never crowded.",
-    "Hard work beats talent when talent doesn’t work hard.",
+    "Go the extra mile. It's never crowded.",
+    "Hard work beats talent when talent doesn't work hard.",
     "Dream big. Start small. Act now."
 ];
 
 function Home() {
     const [todos, setTodos] = useState([]);
     const [inputValue, setInputValue] = useState('');
-    const [category, setCategory] = useState('work'); // work, gym, life
+    const [category, setCategory] = useState('work');
     const [quote, setQuote] = useState('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -116,6 +122,15 @@ function Home() {
                 .eq('id', id);
             if (error) throw error;
             setTodos(todos.map(todo => todo.id === id ? { ...todo, ...updates } : todo));
+
+            // Confetti on completion
+            if (newCompletedStatus) {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            }
         } catch (err) {
             console.error('Error toggling todo:', err.message);
             setError('Failed to update mission.');
@@ -174,56 +189,73 @@ function Home() {
     const progress = totalCount === 0 ? 0 : Math.round((completedCount / totalCount) * 100);
 
     return (
-        <div className="min-h-screen bg-black text-zinc-100 py-12 px-4 sm:px-6 lg:px-8 font-sans selection:bg-zinc-700 selection:text-white">
-            <div className="max-w-lg mx-auto">
-                <div className="flex justify-end mb-4">
+        <div className="min-h-screen bg-black text-zinc-100 py-12 px-4 sm:px-6 lg:px-8 font-['Inter',sans-serif] selection:bg-zinc-700 selection:text-white relative overflow-hidden">
+            <ParticleBackground />
+            <div className="max-w-lg mx-auto relative z-10">
+                {/* Header */}
+                <div className="flex justify-between items-center mb-6">
                     <button onClick={handleLogout} className="text-xs text-zinc-500 hover:text-red-500 transition-colors uppercase tracking-widest font-bold">
                         Logout
                     </button>
+                    <ThemeToggle />
                 </div>
-                <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-                    <h1 className="text-4xl font-extrabold text-center mb-2 tracking-tight text-white">
+
+                {/* Hero Section */}
+                <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8 text-center">
+                    <h1 className="text-5xl font-extrabold tracking-tight text-white mb-2">
                         IRON<span className="text-red-600">FOCUS</span>
                     </h1>
-                    <p className="text-center text-zinc-500 text-xs uppercase tracking-widest font-medium mb-6">
-                        Forged in Discipline
+                    <p className="text-zinc-500 text-xs uppercase tracking-widest font-medium">
+                        Forge Discipline, Crush Goals
                     </p>
-                    <div className="bg-zinc-900/50 p-4 rounded-xl border border-zinc-800 text-center">
-                        <p className="text-zinc-400 italic text-sm">{quote}</p>
-                    </div>
                 </motion.div>
 
-                {/* Progress Bar */}
-                <div className="mb-2 bg-zinc-900 rounded-full h-3 overflow-hidden border border-zinc-800">
-                    <motion.div
-                        className="h-full bg-gradient-to-r from-blue-600 to-red-600"
-                        initial={{ width: 0 }}
-                        animate={{ width: `${progress}%` }}
-                        transition={{ duration: 0.5, ease: "easeInOut" }}
-                    />
-                </div>
-                <div className="flex justify-between text-xs text-zinc-500 font-medium mb-8 px-1">
-                    <span>{completedCount}/{totalCount} Crushed</span>
-                    <span>{progress}%</span>
+                {/* Quote Box */}
+                <div className="glass p-5 rounded-2xl text-center mb-8 shadow-2xl">
+                    <p className="text-zinc-400 italic text-sm leading-relaxed">{quote}</p>
                 </div>
 
+                {/* Circular Progress */}
+                <div className="flex items-center justify-center mb-8">
+                    <div className="w-32 h-32">
+                        <CircularProgressbar
+                            value={progress}
+                            text={`${progress}%`}
+                            styles={buildStyles({
+                                textColor: '#f5f5f5',
+                                pathColor: progress > 50 ? '#dc2626' : '#3b82f6',
+                                trailColor: '#27272a',
+                                textSize: '24px',
+                            })}
+                        />
+                    </div>
+                </div>
+                <div className="text-center text-xs text-zinc-500 font-medium mb-8">
+                    {completedCount}/{totalCount} Missions Crushed
+                </div>
+
+                {/* Add Todo Form */}
                 <form onSubmit={addTodo} className="mb-8">
                     {error && (
-                        <div className="mb-4 bg-red-900/30 border border-red-500 text-red-400 px-4 py-3 rounded-lg text-sm text-center">
+                        <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="mb-4 bg-red-900/30 border border-red-500 text-red-400 px-4 py-3 rounded-lg text-sm text-center"
+                        >
                             {error}
-                        </div>
+                        </motion.div>
                     )}
-                    <div className="relative group mb-3">
+                    <div className="relative group mb-4">
                         <input
                             type="text"
                             value={inputValue}
                             onChange={e => setInputValue(e.target.value)}
                             placeholder="Next Mission..."
-                            className="w-full px-6 py-5 rounded-2xl bg-zinc-900 text-zinc-100 placeholder-zinc-600 shadow-xl border border-zinc-800 focus:border-zinc-600 focus:ring-1 focus:ring-zinc-600 outline-none text-lg transition-all"
+                            className="glass w-full px-6 py-5 rounded-2xl bg-zinc-900/50 text-zinc-100 placeholder-zinc-500 shadow-2xl border border-zinc-700 focus:border-zinc-500 focus:ring-2 focus:ring-zinc-600/50 outline-none text-lg transition-all"
                         />
                         <button
                             type="submit"
-                            className="absolute right-3 top-3 bottom-3 bg-white text-black rounded-xl w-12 flex items-center justify-center hover:bg-zinc-200 hover:scale-105 active:scale-95 transition-all shadow-lg disabled:opacity-50 disabled:hover:scale-100"
+                            className="absolute right-3 top-3 bottom-3 bg-gradient-to-r from-blue-600 to-red-600 text-white rounded-xl w-12 flex items-center justify-center hover:scale-110 active:scale-95 transition-transform shadow-lg disabled:opacity-50 disabled:hover:scale-100"
                             disabled={!inputValue.trim()}
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -231,26 +263,27 @@ function Home() {
                             </svg>
                         </button>
                     </div>
+
                     {/* Category Selector */}
                     <div className="flex gap-2 justify-center">
                         <button
                             type="button"
                             onClick={() => setCategory('work')}
-                            className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all border ${category === 'work' ? 'bg-blue-900/30 border-blue-500 text-blue-400' : 'bg-zinc-900 border-zinc-800 text-zinc-500 hover:bg-zinc-800'}`}
+                            className={`flex-1 py-3 rounded-xl text-sm font-bold transition-all border-2 ${category === 'work' ? 'glass bg-blue-900/40 border-blue-500 text-blue-300 scale-105' : 'bg-zinc-900/50 border-zinc-800 text-zinc-500 hover:bg-zinc-800/70 hover:scale-105'}`}
                         >
                             💼 WORK
                         </button>
                         <button
                             type="button"
                             onClick={() => setCategory('gym')}
-                            className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all border ${category === 'gym' ? 'bg-red-900/30 border-red-500 text-red-400' : 'bg-zinc-900 border-zinc-800 text-zinc-500 hover:bg-zinc-800'}`}
+                            className={`flex-1 py-3 rounded-xl text-sm font-bold transition-all border-2 ${category === 'gym' ? 'glass bg-red-900/40 border-red-500 text-red-300 scale-105' : 'bg-zinc-900/50 border-zinc-800 text-zinc-500 hover:bg-zinc-800/70 hover:scale-105'}`}
                         >
                             💪 GYM
                         </button>
                         <button
                             type="button"
                             onClick={() => setCategory('life')}
-                            className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all border ${category === 'life' ? 'bg-green-900/30 border-green-500 text-green-400' : 'bg-zinc-900 border-zinc-800 text-zinc-500 hover:bg-zinc-800'}`}
+                            className={`flex-1 py-3 rounded-xl text-sm font-bold transition-all border-2 ${category === 'life' ? 'glass bg-green-900/40 border-green-500 text-green-300 scale-105' : 'bg-zinc-900/50 border-zinc-800 text-zinc-500 hover:bg-zinc-800/70 hover:scale-105'}`}
                         >
                             🌱 LIFE
                         </button>
@@ -258,22 +291,20 @@ function Home() {
                 </form>
 
                 {/* Date Filter */}
-                <div className="flex items-center justify-between mt-8 border-b border-zinc-800 pb-2 mb-4">
+                <div className="flex items-center justify-between mt-8 border-b border-zinc-800 pb-3 mb-6">
                     <h3 className="text-zinc-500 text-xs uppercase tracking-widest font-bold">Completed Missions</h3>
                     <div className="flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
+                        <CalendarIcon className="h-5 w-5 text-zinc-400" />
                         <input
                             type="date"
                             value={selectedDate}
                             onChange={e => setSelectedDate(e.target.value)}
-                            className="bg-zinc-900 text-zinc-400 text-xs rounded-lg px-2 py-1 border border-zinc-800 focus:border-zinc-600 outline-none"
+                            className="glass bg-zinc-900/50 text-zinc-400 text-xs rounded-lg px-3 py-1.5 border border-zinc-700 focus:border-zinc-500 outline-none transition-all"
                         />
                         {selectedDate && (
                             <button
                                 onClick={() => setSelectedDate('')}
-                                className="text-xs text-red-500 hover:text-red-400"
+                                className="text-xs text-red-500 hover:text-red-400 font-medium transition-colors"
                             >
                                 Clear
                             </button>
@@ -281,41 +312,58 @@ function Home() {
                     </div>
                 </div>
 
-                <div className="space-y-8">
+                {/* Todo Lists */}
+                <div className="space-y-6">
                     <AnimatePresence mode="popLayout">
                         {loading ? (
-                            <div className="text-center text-zinc-500 mt-12">Loading missions...</div>
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                className="text-center text-zinc-500 mt-12"
+                            >
+                                Loading missions...
+                            </motion.div>
                         ) : (
                             <>
                                 {/* Pending Tasks */}
                                 {pending.length > 0 && (
-                                    <div className="space-y-3">
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="space-y-3"
+                                    >
                                         <h3 className="text-zinc-500 text-xs uppercase tracking-widest font-bold mb-4">Active Missions</h3>
                                         {pending.map(todo => (
                                             <TodoItem key={todo.id} todo={todo} toggleTodo={toggleTodo} deleteTodo={deleteTodo} />
                                         ))}
-                                    </div>
+                                    </motion.div>
                                 )}
 
                                 {/* Completed Tasks Grouped */}
                                 {Object.entries(groupedCompleted).map(([date, groupTodos]) => (
-                                    <div key={date} className="space-y-3">
-                                        <h3 className="text-zinc-500 text-xs uppercase tracking-widest font-bold mb-4 mt-4">{date}</h3>
+                                    <motion.div
+                                        key={date}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="space-y-3"
+                                    >
+                                        <h3 className="text-zinc-500 text-xs uppercase tracking-widest font-bold mb-4 mt-6">{date}</h3>
                                         {groupTodos.map(todo => (
                                             <TodoItem key={todo.id} todo={todo} toggleTodo={toggleTodo} deleteTodo={deleteTodo} />
                                         ))}
-                                    </div>
+                                    </motion.div>
                                 ))}
 
                                 {todos.length === 0 && (
                                     <motion.div
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        exit={{ opacity: 0 }}
-                                        className="text-center mt-12"
+                                        initial={{ opacity: 0, scale: 0.9 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.9 }}
+                                        className="text-center mt-16 glass p-12 rounded-2xl"
                                     >
-                                        <p className="text-zinc-700 text-6xl mb-4">💤</p>
-                                        <p className="text-zinc-600 italic">No missions pending.</p>
+                                        <p className="text-zinc-700 text-7xl mb-4">💤</p>
+                                        <p className="text-zinc-600 italic text-lg">No missions pending.</p>
+                                        <p className="text-zinc-700 text-sm mt-2">Time to forge some discipline!</p>
                                     </motion.div>
                                 )}
                             </>
