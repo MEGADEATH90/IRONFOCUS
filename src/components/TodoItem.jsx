@@ -37,11 +37,18 @@ const TodoItem = ({ todo, toggleTodo, deleteTodo }) => {
                     <span className={`text-lg font-medium transition-all duration-300 ${todo.completed ? 'line-through text-zinc-600' : 'text-zinc-100'}`}>
                         {todo.text}
                     </span>
-                    {todo.category && (
-                        <span className="text-xs text-zinc-500 uppercase tracking-wider font-bold flex items-center gap-1">
-                            {CATEGORY_ICONS[todo.category]} {todo.category}
-                        </span>
-                    )}
+                    <div className="flex items-center gap-2 mt-1">
+                        {todo.category && (
+                            <span className="text-xs text-zinc-500 uppercase tracking-wider font-bold flex items-center gap-1">
+                                {CATEGORY_ICONS[todo.category]} {todo.category}
+                            </span>
+                        )}
+                        {todo.completed && todo.completed_at && (
+                            <span className="text-xs text-zinc-600 flex items-center gap-1">
+                                • 🕒 {new Date(todo.completed_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                        )}
+                    </div>
                 </div>
             </div>
 
