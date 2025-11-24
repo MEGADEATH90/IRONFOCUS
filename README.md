@@ -1,16 +1,60 @@
-# React + Vite
+# IRONFOCUS
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A premium, mobile‑first todo / mission tracker built with **React**, **Vite**, **Tailwind CSS**, **Supabase** for authentication & data, and **Framer Motion** for smooth animations.
 
-Currently, two official plugins are available:
+## Features
+- Sign‑up / login via Supabase.
+- Add missions with categories (Work, Gym, Life).
+- Mark missions as completed; timestamps are stored.
+- Filter completed missions by date using a calendar icon.
+- Progress bar visualising completed vs total missions.
+- Responsive design – works on desktop, tablet, and mobile.
+- Deployed on Vercel (continuous deployment from GitHub).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Getting Started
+### Prerequisites
+- **Node.js** (v18+ recommended)
+- **Git**
+- A **Supabase** project with a `todos` table (see `setup_database.sql`).
 
-## React Compiler
+### Installation
+```bash
+# Clone the repo
+git clone https://github.com/MEGADEATH90/IRONFOCUS.git
+cd IRONFOCUS
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+# Install dependencies
+npm install
+```
 
-## Expanding the ESLint configuration
+### Environment Variables
+Create a `.env` file in the project root:
+```
+VITE_SUPABASE_URL=your-supabase-url
+VITE_SUPABASE_ANON_KEY=your-anon-key
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Development
+```bash
+npm run dev
+```
+Open <http://localhost:5173> in your browser.
+
+### Build & Deploy
+```bash
+npm run build   # creates a production bundle in /dist
+npx vercel --prod   # deploys to Vercel (requires Vercel CLI login)
+```
+
+## Usage
+1. **Sign up / log in**.
+2. Enter a mission in the **Next Mission…** field, select a category, and press the **+** button.
+3. Toggle a mission to mark it completed – it moves to the **Completed Missions** section.
+4. Use the **calendar icon** next to the date filter to view completed missions for a specific day.
+5. Click **Logout** to end the session.
+
+## Contributing
+Feel free to open issues or submit pull requests. Follow the existing code style (Prettier + ESLint) and run `npm run lint` before committing.
+
+---
+© 2025 IRONFOCUS – built with love and discipline.
