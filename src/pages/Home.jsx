@@ -189,7 +189,7 @@ function Home() {
     const progress = totalCount === 0 ? 0 : Math.round((completedCount / totalCount) * 100);
 
     return (
-        <div className="min-h-screen bg-black text-zinc-100 py-12 px-4 sm:px-6 lg:px-8 font-['Inter',sans-serif] selection:bg-zinc-700 selection:text-white relative overflow-hidden">
+        <div className="min-h-screen bg-zinc-950 py-12 px-4 sm:px-6 lg:px-8 font-['Inter',sans-serif] relative overflow-hidden transition-colors duration-300">
             <ParticleBackground />
             <div className="max-w-lg mx-auto relative z-10">
                 {/* Header */}
