@@ -211,13 +211,13 @@ function Home() {
                 </motion.div>
 
                 {/* Quote Box */}
-                <div className="glass p-5 rounded-2xl text-center mb-8 shadow-2xl">
+                <div className="glass card-3d p-5 rounded-2xl text-center mb-8">
                     <p className="text-zinc-400 italic text-sm leading-relaxed">{quote}</p>
                 </div>
 
                 {/* Circular Progress */}
                 <div className="flex items-center justify-center mb-8">
-                    <div className="w-32 h-32">
+                    <div className="w-32 h-32 progress-3d">
                         <CircularProgressbar
                             value={progress}
                             text={`${progress}%`}
@@ -240,7 +240,7 @@ function Home() {
                         <motion.div
                             initial={{ opacity: 0, y: -10 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="mb-4 bg-red-900/30 border border-red-500 text-red-400 px-4 py-3 rounded-lg text-sm text-center"
+                            className="mb-4 bg-red-900/30 border border-red-500 text-red-400 px-4 py-3 rounded-lg text-sm text-center card-3d"
                         >
                             {error}
                         </motion.div>
@@ -251,14 +251,14 @@ function Home() {
                             value={inputValue}
                             onChange={e => setInputValue(e.target.value)}
                             placeholder="Next Mission..."
-                            className="glass w-full px-6 py-5 rounded-2xl bg-zinc-900/50 text-zinc-100 placeholder-zinc-500 shadow-2xl border border-zinc-700 focus:border-zinc-500 focus:ring-2 focus:ring-zinc-600/50 outline-none text-lg transition-all"
+                            className="glass input-3d w-full px-6 py-5 rounded-2xl bg-zinc-900/50 text-zinc-100 placeholder-zinc-500 border border-zinc-700 focus:border-zinc-500 outline-none text-lg transition-all"
                         />
                         <button
                             type="submit"
-                            className="absolute right-3 top-3 bottom-3 bg-gradient-to-r from-blue-600 to-red-600 text-white rounded-xl w-12 flex items-center justify-center hover:scale-110 active:scale-95 transition-transform shadow-lg disabled:opacity-50 disabled:hover:scale-100"
+                            className="btn-3d absolute right-3 top-3 bottom-3 bg-gradient-to-r from-blue-600 to-red-600 text-white rounded-xl w-12 flex items-center justify-center disabled:opacity-50"
                             disabled={!inputValue.trim()}
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 icon-3d" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
                             </svg>
                         </button>
@@ -269,21 +269,21 @@ function Home() {
                         <button
                             type="button"
                             onClick={() => setCategory('work')}
-                            className={`flex-1 py-3 rounded-xl text-sm font-bold transition-all border-2 ${category === 'work' ? 'glass bg-blue-900/40 border-blue-500 text-blue-300 scale-105' : 'bg-zinc-900/50 border-zinc-800 text-zinc-500 hover:bg-zinc-800/70 hover:scale-105'}`}
+                            className={`btn-3d flex-1 py-3 rounded-xl text-sm font-bold transition-all border-2 ${category === 'work' ? 'glass bg-blue-900/40 border-blue-500 text-blue-300 scale-105' : 'bg-zinc-900/50 border-zinc-800 text-zinc-500 hover:bg-zinc-800/70 hover:scale-105'}`}
                         >
                             💼 WORK
                         </button>
                         <button
                             type="button"
                             onClick={() => setCategory('gym')}
-                            className={`flex-1 py-3 rounded-xl text-sm font-bold transition-all border-2 ${category === 'gym' ? 'glass bg-red-900/40 border-red-500 text-red-300 scale-105' : 'bg-zinc-900/50 border-zinc-800 text-zinc-500 hover:bg-zinc-800/70 hover:scale-105'}`}
+                            className={`btn-3d flex-1 py-3 rounded-xl text-sm font-bold transition-all border-2 ${category === 'gym' ? 'glass bg-red-900/40 border-red-500 text-red-300 scale-105' : 'bg-zinc-900/50 border-zinc-800 text-zinc-500 hover:bg-zinc-800/70 hover:scale-105'}`}
                         >
                             💪 GYM
                         </button>
                         <button
                             type="button"
                             onClick={() => setCategory('life')}
-                            className={`flex-1 py-3 rounded-xl text-sm font-bold transition-all border-2 ${category === 'life' ? 'glass bg-green-900/40 border-green-500 text-green-300 scale-105' : 'bg-zinc-900/50 border-zinc-800 text-zinc-500 hover:bg-zinc-800/70 hover:scale-105'}`}
+                            className={`btn-3d flex-1 py-3 rounded-xl text-sm font-bold transition-all border-2 ${category === 'life' ? 'glass bg-green-900/40 border-green-500 text-green-300 scale-105' : 'bg-zinc-900/50 border-zinc-800 text-zinc-500 hover:bg-zinc-800/70 hover:scale-105'}`}
                         >
                             🌱 LIFE
                         </button>
@@ -294,17 +294,17 @@ function Home() {
                 <div className="flex items-center justify-between mt-8 border-b border-zinc-800 pb-3 mb-6">
                     <h3 className="text-zinc-500 text-xs uppercase tracking-widest font-bold">Completed Missions</h3>
                     <div className="flex items-center gap-2">
-                        <CalendarIcon className="h-5 w-5 text-zinc-400" />
+                        <CalendarIcon className="h-5 w-5 text-zinc-400 icon-3d" />
                         <input
                             type="date"
                             value={selectedDate}
                             onChange={e => setSelectedDate(e.target.value)}
-                            className="glass bg-zinc-900/50 text-zinc-400 text-xs rounded-lg px-3 py-1.5 border border-zinc-700 focus:border-zinc-500 outline-none transition-all"
+                            className="glass input-3d bg-zinc-900/50 text-zinc-400 text-xs rounded-lg px-3 py-1.5 border border-zinc-700 focus:border-zinc-500 outline-none transition-all"
                         />
                         {selectedDate && (
                             <button
                                 onClick={() => setSelectedDate('')}
-                                className="text-xs text-red-500 hover:text-red-400 font-medium transition-colors"
+                                className="btn-3d text-xs text-red-500 hover:text-red-400 font-medium px-2 py-1 rounded"
                             >
                                 Clear
                             </button>
